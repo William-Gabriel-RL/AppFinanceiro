@@ -1,3 +1,5 @@
+using AutoMapper;
+using CrossCutting.Profiles;
 using Data.Context;
 using Data.Interfaces;
 using Data.Repositories;
@@ -10,6 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppFinanceiroContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("AppFinanceiro")));
 
+
+builder.Services.AddAutoMapper(typeof(PeopleProfile));
+
+builder.Services.AddTransient<IMapper, Mapper>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICardRepository, CardRepository>();
@@ -26,6 +32,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 if (app.Environment.IsDevelopment())
 {

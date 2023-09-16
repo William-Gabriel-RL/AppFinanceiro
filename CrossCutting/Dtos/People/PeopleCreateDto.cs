@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities
+namespace CrossCutting.Dtos.People
 {
-    public class People
+    public class PeopleCreateDto
     {
-        [Key]
-        public Guid IdPeople { get; set; }
-
         [Required]
         [MaxLength(50)]
         [MinLength(10)]
@@ -19,14 +16,5 @@ namespace Domain.Entities
 
         [Required]
         public string Password { get; set; } = string.Empty;
-
-        [Required]
-        public bool IsActive { get; set; } = true;
-
-        [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        [Required]
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }
