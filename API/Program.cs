@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppFinanceiroContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("AppFinanceiro")));
 
 
-builder.Services.AddAutoMapper(typeof(PeopleProfile));
+builder.Services.AddAutoMapper(typeof(PeopleProfile), typeof(AccountProfile));
 
 builder.Services.AddTransient<IMapper, Mapper>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();

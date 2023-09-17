@@ -4,7 +4,7 @@ using Services.Interfaces;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/people")]
     [ApiController]
     public class PeopleController : ControllerBase
     {
