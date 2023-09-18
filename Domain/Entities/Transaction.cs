@@ -33,6 +33,8 @@ namespace Domain.Entities
         [MinLength(3)]
         public string Description { get; set; } = string.Empty;
 
+        public bool IsReverted { get; set; } = false;
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

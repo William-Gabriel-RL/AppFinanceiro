@@ -7,5 +7,6 @@ namespace Data.Interfaces
         void CreateTransaction(Transaction transaction);
         IEnumerable<Transaction> GetTransactionsByAccount(Guid accountId);
         Transaction? GetTransaction(Guid accountId, Guid transactionId);
+        void SetTransactionAsReverted(Transaction transaction, Transaction reverseTransaction);
     }
 }

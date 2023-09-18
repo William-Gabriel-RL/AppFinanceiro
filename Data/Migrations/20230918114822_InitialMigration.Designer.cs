@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppFinanceiroContext))]
-    [Migration("20230918020419_InitialMigration")]
+    [Migration("20230918114822_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -152,6 +152,9 @@ namespace Data.Migrations
 
                     b.Property<Guid>("IdAccount")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("IsReverted")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

@@ -54,11 +54,6 @@ namespace Services
             return _mapper.Map<IEnumerable<AccountReadDto>>(accounts);
         }
 
-        public void UpdateAccountBalance(Guid accountGuid, decimal value)
-        {
-            _repository.UpdateAccountBalance(accountGuid, value);
-        }
-
         public AccountBalanceReadDto? GetAccountBalance(Guid accountGuid)
         {
             var balance = _repository.GetAccountBalance(accountGuid);

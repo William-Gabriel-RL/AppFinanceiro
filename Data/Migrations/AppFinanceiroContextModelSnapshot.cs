@@ -150,6 +150,9 @@ namespace Data.Migrations
                     b.Property<Guid>("IdAccount")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsReverted")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 

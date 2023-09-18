@@ -52,8 +52,8 @@ namespace Data.Repositories
             Account? account = _context.Accounts.FirstOrDefault(a => a.IdAccount == accountGuid);
             if (account != null)
             {
-                var novoBalanco = account.Balance - value;
-                if (account.Balance - value < 0)
+                var novoBalanco = account.Balance + value;
+                if (novoBalanco >= 0)
                 {
                     account.Balance = novoBalanco;
                     _context.SaveChanges();

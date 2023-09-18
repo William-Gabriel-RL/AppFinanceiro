@@ -41,14 +41,18 @@ namespace Services.Services
             var transaction = _repository.GetTransaction(accountId, transactionId);
             if (transaction != null)
             {
-                Transaction reverseTransaction = new()
+                if (transaction.IsReverted == false)
                 {
-                    Value = transaction.Value * -1,
-                    IdAccount = transaction.IdAccount,
-                    Description = "Estorno de cobrança indevida."
-                };
-                _repository.CreateTransaction(reverseTransaction);
-                return _mapper.Map<TransactionReadDto>(reverseTransaction);
+                    Transaction reverseTransaction = new()
+                    {
+                        Value = transaction.Value * -1,
+                        IdAccount = transaction.IdAccount,
+                        Description = "Estorno de cobrança indevida."
+                    };
+                    _repository.CreateTransaction(reverseTransaction);
+                    _repository.SetTransactionAsReverted(transaction, reverseTransaction);
+                    return _mapper.Map<TransactionReadDto>(reverseTransaction);
+                }                
             }
             return null;
         }

@@ -12,8 +12,6 @@ namespace Services.Interfaces
 
         AccountAndCardReadDto? GetCardsByAccount(Guid accountGuid);
 
-        void UpdateAccountBalance(Guid accountGuid, decimal value);
-
         AccountBalanceReadDto? GetAccountBalance(Guid accountGuid);
     }
 }
