@@ -8,8 +8,19 @@ namespace Domain.Entities
         [Key]
         public Guid IdTransaction { get; set; }
 
+        private decimal _value;
+
         [Required]
-        public double Value { get; set; }
+        public decimal Value
+        {
+            get => _value;
+            set
+            {
+                if (value == 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                _value = value;
+            }
+        }
 
         [Required]
         [ForeignKey("Account")]
@@ -18,7 +29,8 @@ namespace Domain.Entities
         public virtual Account? Account { get; set; }
 
         [Required]
-        [MaxLength(256)]
+        [MaxLength(100)]
+        [MinLength(3)]
         public string Description { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;

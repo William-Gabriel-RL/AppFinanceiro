@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppFinanceiroContext))]
-    [Migration("20230916004206_PrimeiraMigration")]
-    partial class PrimeiraMigration
+    [Migration("20230918020419_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,8 +36,8 @@ namespace Data.Migrations
                         .HasMaxLength(9)
                         .HasColumnType("character varying(9)");
 
-                    b.Property<double>("Balance")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Branch")
                         .IsRequired()
@@ -80,9 +80,6 @@ namespace Data.Migrations
                     b.Property<Guid>("IdAccount")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("IdCardType")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -91,6 +88,10 @@ namespace Data.Migrations
                         .HasMaxLength(19)
                         .HasColumnType("character varying(19)");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -98,31 +99,7 @@ namespace Data.Migrations
 
                     b.HasIndex("IdAccount");
 
-                    b.HasIndex("IdCardType");
-
                     b.ToTable("Cards");
-                });
-
-            modelBuilder.Entity("Domain.Entities.CardType", b =>
-                {
-                    b.Property<int>("IdCardType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdCardType"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Name")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("IdCardType");
-
-                    b.ToTable("CardTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.People", b =>
@@ -170,8 +147,8 @@ namespace Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<Guid>("IdAccount")
                         .HasColumnType("uuid");
@@ -179,8 +156,8 @@ namespace Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<double>("Value")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("numeric");
 
                     b.HasKey("IdTransaction");
 
@@ -208,15 +185,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.CardType", "CardType")
-                        .WithMany()
-                        .HasForeignKey("IdCardType")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("CardType");
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>

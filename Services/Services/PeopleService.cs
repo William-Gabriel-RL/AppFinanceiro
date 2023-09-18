@@ -24,14 +24,5 @@ namespace Services.Services
 
             return _mapper.Map<PeopleReadDto>(peopleModel);
         }
-
-        public PeopleReadDto? GetPeopleById(Guid id)
-        {
-            var people = _repository.GetPeopleById(id);
-            if (people != null)
-                return _mapper.Map<PeopleReadDto>(people);
-
-            return null;
-        }
     }
 }

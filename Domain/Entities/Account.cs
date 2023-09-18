@@ -23,7 +23,7 @@ namespace Domain.Entities
         public virtual People? People { get; set; }
 
         [Required]
-        public double Balance { get; set; } = 0.0;
+        public decimal Balance { get; set; } = 0;
 
         [Required]
         public bool IsActive { get; set;} = true;

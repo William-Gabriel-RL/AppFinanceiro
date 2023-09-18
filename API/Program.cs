@@ -13,15 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppFinanceiroContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("AppFinanceiro")));
 
 
-builder.Services.AddAutoMapper(typeof(PeopleProfile), typeof(AccountProfile));
+builder.Services.AddAutoMapper(typeof(PeopleProfile), typeof(AccountProfile), typeof(CardProfile), typeof(TransactionProfile));
 
 builder.Services.AddTransient<IMapper, Mapper>();
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICardRepository, CardRepository>();
 builder.Services.AddTransient<ICardService, CardService>();
-builder.Services.AddTransient<ICardTypeRepository, CardTypeRepository>();
-builder.Services.AddTransient<ICardTypeService, CardTypeService>();
 builder.Services.AddTransient<IPeopleRepository, PeopleRepository>();
 builder.Services.AddTransient<IPeopleService, PeopleService>();
 builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();

@@ -20,10 +20,5 @@ namespace Data.Repositories
             _context.Peoples.Add(people);
             _context.SaveChanges();
         }
-
-        public People? GetPeopleById(Guid id)
-        {
-            return _context.Peoples.FirstOrDefault(p => p.IdPeople == id);
-        }
     }
 }

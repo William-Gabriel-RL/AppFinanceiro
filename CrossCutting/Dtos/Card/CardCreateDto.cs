@@ -1,23 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities
+namespace CrossCutting.Dtos.Card
 {
-    public class Card
+    public class CardCreateDto
     {
-        [Key]
-        public Guid IdCard { get; set; }
-
-        [Required]
-        [ForeignKey("Account")]
-        public Guid IdAccount {  get; set; }
-
-        public Account? Account { get; set; }
-
         private string _type = string.Empty;
 
         [Required]
-        public string Type {
+        public string Type
+        {
             get => _type;
             set
             {
@@ -41,11 +32,5 @@ namespace Domain.Entities
         [StringLength(3)]
         public string Cvv { get; set; } = string.Empty;
 
-        [Required]
-        public bool IsActive { get; set; } = true;
-
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
 }

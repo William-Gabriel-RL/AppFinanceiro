@@ -9,6 +9,8 @@ namespace CrossCutting.Profiles
         public AccountProfile()
         {
             CreateMap<Account, AccountReadDto>();
+            CreateMap<Account, AccountBalanceReadDto>();
+            CreateMap<Account, AccountAndCardReadDto>();
             CreateMap<AccountCreateDto, Account>();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CrossCutting.Dtos.Account;
+using CrossCutting.Dtos.Card;
 using Data.Interfaces;
 using Domain.Entities;
 using Services.Interfaces;
@@ -34,10 +35,36 @@ namespace Services
             return null;
         }
 
+        public AccountAndCardReadDto? GetCardsByAccount(Guid accountGuid)
+        {
+            var tupla = _repository.GetCardsByAccount(accountGuid);
+            if (tupla.Item2 != null)
+            {
+                var cards = _mapper.Map<AccountAndCardReadDto>(tupla.Item2);
+                if(tupla.Item1 != null)
+                    cards.Cards = _mapper.Map<IEnumerable<CardReadDto>>(tupla.Item1);
+                return cards;
+            }
+            return null;
+        }
+
         public IEnumerable<AccountReadDto> GetAllAccounts(Guid peopleId)
         {
             var accounts = _repository.GetAllAccounts(peopleId);
             return _mapper.Map<IEnumerable<AccountReadDto>>(accounts);
+        }
+
+        public void UpdateAccountBalance(Guid accountGuid, decimal value)
+        {
+            _repository.UpdateAccountBalance(accountGuid, value);
+        }
+
+        public AccountBalanceReadDto? GetAccountBalance(Guid accountGuid)
+        {
+            var balance = _repository.GetAccountBalance(accountGuid);
+            if (balance != null)
+                return _mapper.Map<AccountBalanceReadDto>(balance);
+            return null;
         }
     }
 }

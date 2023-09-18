@@ -1,5 +1,6 @@
 ﻿using Data.Context;
 using Data.Interfaces;
+using Domain.Entities;
 
 namespace Data.Repositories
 {
@@ -10,6 +11,32 @@ namespace Data.Repositories
         public CardRepository(AppFinanceiroContext context)
         {
             _context = context;
+        }
+
+        public void CreateCard(Card card)
+        {
+            if (card == null) throw new ArgumentNullException(nameof(card));
+
+            _context.Cards.Add(card);
+            _context.SaveChanges();
+        }
+
+        public Card? GetCardById(Guid accountId, Guid cardId)
+        {
+            return _context.Cards.FirstOrDefault(c => c.IdAccount == accountId && c.IdCard == cardId);
+        }
+
+        public IEnumerable<Card> GetCardsByPeople(Guid peopleId)
+        {
+            var cards = new List<Card>();
+            var accounts = _context.Accounts.Where(a => a.IdPeople == peopleId).ToList();
+            foreach (var account in accounts)
+            {
+                var cardsByAccounts = _context.Cards.Where(c => c.IdAccount == account.IdAccount);
+                foreach (var card in cardsByAccounts)
+                    cards.Add(card);
+            }
+            return cards;
         }
     }
 }
