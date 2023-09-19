@@ -19,42 +19,72 @@ namespace Services.Services
 
         public TransactionReadDto CreateTransaction(Guid accountId, TransactionCreateDto transaction)
         {
-            var transactionModel = _mapper.Map<Transaction>(transaction);
-            transactionModel.IdAccount = accountId;
+            try
+            {
+                var transactionModel = _mapper.Map<Transaction>(transaction);
+                transactionModel.IdAccount = accountId;
 
-            _repository.CreateTransaction(transactionModel);
+                _repository.CreateTransaction(transactionModel);
 
-            return _mapper.Map<TransactionReadDto>(transactionModel);
+                return _mapper.Map<TransactionReadDto>(transactionModel);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public TransactionAccountReadDto GetTransactionsByAccount(Guid accountId)
+        public TransactionAccountReadDto GetTransactionsByAccount(Guid accountId, int? page, float? resultsPerPage, DateTime? searchedDate)
         {
-            TransactionAccountReadDto transactionList = new();
-            var transactions = _repository.GetTransactionsByAccount(accountId);
-            if (transactions != null)
-                transactionList.Transactions = _mapper.Map<IEnumerable<TransactionReadDto>>(transactions);
-            return transactionList;
+            try
+            {
+                if (page == null || page <= 0)
+                    page = 1;
+
+                if (resultsPerPage == null || resultsPerPage <= 0)
+                    resultsPerPage = 5f;
+
+                TransactionAccountReadDto transactionList = new();
+                transactionList.Pagination.CurrentPage = (int)page;
+                transactionList.Pagination.ItemsPerPage = (int)resultsPerPage;
+
+                var transactions = _repository.GetTransactionsByAccount(accountId, (int)page, (int)resultsPerPage, searchedDate);
+                if (transactions != null)
+                    transactionList.Transactions = _mapper.Map<IEnumerable<TransactionReadDto>>(transactions);
+                return transactionList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public TransactionReadDto? RevertTransaction(Guid accountId, Guid transactionId)
         {
-            var transaction = _repository.GetTransaction(accountId, transactionId);
-            if (transaction != null)
+            try
             {
-                if (transaction.IsReverted == false)
+                var transaction = _repository.GetTransaction(accountId, transactionId);
+                if (transaction != null)
                 {
-                    Transaction reverseTransaction = new()
+                    if (transaction.IsReverted == false)
                     {
-                        Value = transaction.Value * -1,
-                        IdAccount = transaction.IdAccount,
-                        Description = "Estorno de cobrança indevida."
-                    };
-                    _repository.CreateTransaction(reverseTransaction);
-                    _repository.SetTransactionAsReverted(transaction, reverseTransaction);
-                    return _mapper.Map<TransactionReadDto>(reverseTransaction);
-                }                
+                        Transaction reverseTransaction = new()
+                        {
+                            Value = transaction.Value * -1,
+                            IdAccount = transaction.IdAccount,
+                            Description = "Estorno de cobrança indevida."
+                        };
+                        _repository.CreateTransaction(reverseTransaction);
+                        _repository.SetTransactionAsReverted(transaction, reverseTransaction);
+                        return _mapper.Map<TransactionReadDto>(reverseTransaction);
+                    }
+                }
+                return null;
             }
-            return null;
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

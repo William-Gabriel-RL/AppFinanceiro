@@ -26,7 +26,12 @@ namespace Data.Repositories
             return _context.Cards.FirstOrDefault(c => c.IdAccount == accountId && c.IdCard == cardId);
         }
 
-        public IEnumerable<Card> GetCardsByPeople(Guid peopleId)
+        public IEnumerable<Card> GetCardsByAccount(Guid accountId)
+        {
+            return _context.Cards.Where(c => c.IdAccount == accountId);
+        }
+
+        public IEnumerable<Card> GetCardsByPeople(Guid peopleId, int page, float resultsPerPage)
         {
             var cards = new List<Card>();
             var accounts = _context.Accounts.Where(a => a.IdPeople == peopleId).ToList();
@@ -36,7 +41,9 @@ namespace Data.Repositories
                 foreach (var card in cardsByAccounts)
                     cards.Add(card);
             }
-            return cards;
+            return cards
+                .Skip((page -1) * (int)resultsPerPage)
+                .Take((int)resultsPerPage);
         }
     }
 }

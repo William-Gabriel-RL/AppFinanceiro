@@ -35,10 +35,18 @@ namespace Data.Repositories
             return _context.Transactions.FirstOrDefault(t => t.IdAccount == accountId && t.IdTransaction == transactionId);
         }
 
-        public IEnumerable<Transaction> GetTransactionsByAccount(Guid accountId)
+        public IEnumerable<Transaction> GetTransactionsByAccount(Guid accountId, int page, float resultsPerPage, DateTime? searchedDate)
         {
-            var transactions = _context.Transactions.Where(t => t.IdAccount == accountId).ToList();
-            return transactions;
+            var transactions = _context.Transactions.Where(t => t.IdAccount == accountId);
+            if (searchedDate != null)
+            {
+                var date = Convert.ToDateTime(searchedDate).ToString("dd/MM/yyyy");
+                transactions.Where(t => t.CreatedAt.ToString("dd/MM/yyyy") == date);
+            }
+
+            return transactions
+                .Skip((page - 1) * (int)resultsPerPage)
+                .Take((int)resultsPerPage);
         }
 
         public void SetTransactionAsReverted(Transaction transaction, Transaction reverseTransaction)

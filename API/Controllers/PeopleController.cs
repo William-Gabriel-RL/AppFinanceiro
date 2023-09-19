@@ -1,8 +1,10 @@
 ﻿using CrossCutting.Dtos.Account;
 using CrossCutting.Dtos.Card;
 using CrossCutting.Dtos.People;
+using CrossCutting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
@@ -24,8 +26,23 @@ namespace API.Controllers
         [HttpPost]
         public ActionResult<PeopleReadDto> CreatePeople(PeopleCreateDto people)
         {
-            var peopleReadDto = _service.CreatePeople(people);
-            return Ok(peopleReadDto);
+            try
+            {
+                var peopleReadDto = _service.CreatePeople(people);
+                return Ok(peopleReadDto);
+            }
+            catch(PeopleAlreadyCreatedException)
+            {
+                return BadRequest("Cannot create this people, because this document is already in use");
+            }
+            catch (InvalidDocumentException)
+            {
+                return BadRequest("The provided document is invalid");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost("{peopleId}/accounts")]
@@ -59,12 +76,12 @@ namespace API.Controllers
         }
 
         [HttpGet("{peopleId}/cards")]
-        public ActionResult<CardsPeopleReadDto> GetCardsByPeopleId(string peopleId)
+        public ActionResult<CardsPeopleReadDto> GetCardsByPeopleId(string peopleId, [Required]int page, [Required]float resultsPerPage)
         {
             try
             {
                 Guid peopleGuid = new(peopleId);
-                var cards = _serviceCards.GetCardsByPeople(peopleGuid);
+                var cards = _serviceCards.GetCardsByPeople(peopleGuid, page, resultsPerPage);
                 return Ok(cards);
             }
             catch (Exception)

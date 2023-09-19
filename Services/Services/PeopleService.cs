@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CrossCutting.Dtos.People;
+using CrossCutting.Exceptions;
+using CrossCutting.Extensions;
 using Data.Interfaces;
 using Domain.Entities;
 using Services.Interfaces;
@@ -19,10 +21,20 @@ namespace Services.Services
         }
         public PeopleReadDto CreatePeople(PeopleCreateDto people)
         {
-            var peopleModel = _mapper.Map<People>(people);
-            _repository.CreatePeople(peopleModel);
+            try
+            {
+                if (!people.Document.IsValidCNPJ() || !people.Document.IsValidCPF())
+                    throw new InvalidDocumentException();
 
-            return _mapper.Map<PeopleReadDto>(peopleModel);
+                var peopleModel = _mapper.Map<People>(people);
+                _repository.CreatePeople(peopleModel);
+
+                return _mapper.Map<PeopleReadDto>(peopleModel);
+            }
+            catch (Exception) 
+            {
+                throw;
+            }
         }
     }
 }

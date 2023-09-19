@@ -1,7 +1,7 @@
 ﻿using CrossCutting.Dtos.Account;
 using CrossCutting.Dtos.Card;
 using CrossCutting.Dtos.Transaction;
-using Domain.Entities;
+using CrossCutting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 
@@ -32,24 +32,34 @@ namespace API.Controllers
                 if (cards != null) return Ok(cards);
                 return NotFound();
             }
-            catch (Exception)
+            catch (FormatException)
             {
                 return UnprocessableEntity();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpPost("{accountId}/cards")]
-        public ActionResult<CardReadDto> CreateCard(string accountId, CardCreateDto card)
+        public ActionResult<CardReadDto?> CreateCard(string accountId, CardCreateDto card)
         {
             try
             {
                 Guid accountGuid = new(accountId);
                 var newCard = _serviceCard.CreateCard(accountGuid, card);
-                return Ok(newCard);
+                if (newCard != null)
+                    return Ok(newCard);
+                return BadRequest("The infomed PeopleId already own one physical card and this is the max physical cards permited");
+            }
+            catch (FormatException)
+            {
+                return UnprocessableEntity();
             }
             catch (Exception)
             {
-                return UnprocessableEntity();
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -62,19 +72,31 @@ namespace API.Controllers
                 var newTransaction = _serviceTransaction.CreateTransaction(accountGuid, transaction);
                 return Ok(newTransaction);
             }
-            catch (Exception)
+            catch (InvalidAccountUpdateException)
+            {
+                return BadRequest("It's not possible to set the balance below zero");
+            }
+            catch (AccountNotFoundException)
+            {
+                return BadRequest("The provided account does not exists");
+            }
+            catch (FormatException)
             {
                 return UnprocessableEntity();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpGet("{accountId}/transactions")]
-        public ActionResult<TransactionAccountReadDto> GetTransactionsByAccount(string accountId)
+        public ActionResult<TransactionAccountReadDto> GetTransactionsByAccount(string accountId, int? page, float? resultsPerPage, DateTime? searchedDate)
         {
             try
             {
                 Guid accountGuid = new(accountId);
-                var cards = _serviceTransaction.GetTransactionsByAccount(accountGuid);
+                var cards = _serviceTransaction.GetTransactionsByAccount(accountGuid, page, resultsPerPage, searchedDate);
                 return Ok(cards);
             }
             catch (Exception)
@@ -92,14 +114,18 @@ namespace API.Controllers
                 var balance = _service.GetAccountBalance(accountGuid);
                 return Ok(balance);
             }
-            catch (Exception)
+            catch (FormatException)
             {
                 return UnprocessableEntity();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpGet("{accountId}/transactions/{transactionId}/revert")]
-        public ActionResult<TransactionReadDto> RevertTransaction(string accountId, string transactionId) 
+        public ActionResult<TransactionReadDto> RevertTransaction(string accountId, string transactionId)
         {
             try
             {
@@ -110,9 +136,13 @@ namespace API.Controllers
                     return Ok(revertedTransaction);
                 return NotFound();
             }
+            catch (FormatException)
+            {
+                return UnprocessableEntity();
+            }
             catch (Exception)
             {
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

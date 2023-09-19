@@ -4,8 +4,8 @@ namespace Services.Interfaces
 {
     public interface ICardService
     {
-        CardReadDto CreateCard(Guid accountId, CardCreateDto card);
+        CardReadDto? CreateCard(Guid accountId, CardCreateDto card);
         CardReadDto? GetCardById(Guid accountId, Guid cardId);
-        CardsPeopleReadDto GetCardsByPeople(Guid peopleId);
+        CardsPeopleReadDto GetCardsByPeople(Guid peopleId, int page, float resultsPerPage);
     }
 }

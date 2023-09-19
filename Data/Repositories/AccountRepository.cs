@@ -1,4 +1,5 @@
-﻿using Data.Context;
+﻿using CrossCutting.Exceptions;
+using Data.Context;
 using Data.Interfaces;
 using Domain.Entities;
 
@@ -15,7 +16,7 @@ namespace Data.Repositories
 
         public void CreateAccount(Account account)
         {
-            if (account == null) throw new ArgumentNullException(nameof(account));
+            if (account == null) throw new AccountNotFoundException();
 
             _context.Accounts.Add(account);
             _context.SaveChanges();
@@ -59,11 +60,11 @@ namespace Data.Repositories
                     _context.SaveChanges();
                 }
                 else
-                    throw new InvalidOperationException();
+                    throw new InvalidAccountUpdateException();
 
             }
             else
-                throw new NullReferenceException();
+                throw new AccountNotFoundException();
             
         }
     }

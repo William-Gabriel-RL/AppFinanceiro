@@ -4,15 +4,18 @@ using Data.Context;
 using Data.Interfaces;
 using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Services;
 using Services.Interfaces;
 using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich.FromLogContext().CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+
 builder.Services.AddDbContext<AppFinanceiroContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("AppFinanceiro")));
-
-
 builder.Services.AddAutoMapper(typeof(PeopleProfile), typeof(AccountProfile), typeof(CardProfile), typeof(TransactionProfile));
 
 builder.Services.AddTransient<IMapper, Mapper>();

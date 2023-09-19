@@ -3,15 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{CEBBE741-D56E-4944-BE0E-38E8E8DCB9FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{CEBBE741-D56E-4944-BE0E-38E8E8DCB9FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{8389E731-DF51-4547-93A9-295EDA2D594D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{8389E731-DF51-4547-93A9-295EDA2D594D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{465604CD-5188-4CB7-A690-02A1756995CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{465604CD-5188-4CB7-A690-02A1756995CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{8B9A7194-017B-4C01-B825-126DB4781B34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{8B9A7194-017B-4C01-B825-126DB4781B34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting", "CrossCutting\CrossCutting.csproj", "{A4BAD05A-9CC5-4482-9D25-ADCE2F58C22B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting", "CrossCutting\CrossCutting.csproj", "{A4BAD05A-9CC5-4482-9D25-ADCE2F58C22B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{6E0A5399-1FEF-44B3-8A3C-3749B0E93F33}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{94D3DF5B-47FF-4E62-AA7E-DA98206DA619}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +46,10 @@ Global
 		{A4BAD05A-9CC5-4482-9D25-ADCE2F58C22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4BAD05A-9CC5-4482-9D25-ADCE2F58C22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4BAD05A-9CC5-4482-9D25-ADCE2F58C22B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E0A5399-1FEF-44B3-8A3C-3749B0E93F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E0A5399-1FEF-44B3-8A3C-3749B0E93F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E0A5399-1FEF-44B3-8A3C-3749B0E93F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E0A5399-1FEF-44B3-8A3C-3749B0E93F33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
